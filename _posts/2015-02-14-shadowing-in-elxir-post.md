@@ -150,9 +150,9 @@ iex(4)> our_response = case knocking_at_our_door do
 
 {% endhighlight %}
 
-See the difference? Notice the `^friend` versus `friend` and `^enemy` versus `enemy`. The hat `^` says "use the last pinned value of this variable." Without the `^` the variable `friend` was't used as a guarding, declarative pattern match, it was used as a short-lived shadow variable that held whatever was passed in. That first clause would always match, and as soon as the case statement fell out of scope the evidence that for a tiny moment `friend` was `==` to `Voldemort`. That is subtle. That is dark magic. It is easy (especially for Erlangers who expect a match) to miss it. This will cause disasters. The upside is hard to see.
+See the difference? Notice the `^friend` versus `friend` and `^enemy` versus `enemy`. The hat `^` says "use the last pinned value of this variable." Without the `^` the variable `friend` was't used as a guarding, declarative pattern match, it was used as a short-lived shadow variable that held whatever was passed in. That first clause would always match, and as soon as the case statement fell out of scope the evidence that for a tiny moment `friend` was `==` to `Voldemort`. That is subtle. That is dark magic. It is easy (especially for Erlangers who expect a match) to miss it. This will cause disasters, and the upside of the current behavious is hard to see. 
 
 ###Conclusion
-Shadowing is not harmful in the same way that mutable variables are harmful. It's not going to jack up your parallel work. Shadowing is harmful in another way; it creates a pitfall and adds a diligence requirement (always a bad thing) when using pattern matching. This an ugly wart on a  beautiful language.
+Shadowing is not harmful in the same way that mutable variables are harmful. It's not going to jack up your parallel work. Shadowing is harmful in another way; it creates a pitfall and adds a diligence requirement (always a bad thing) when using pattern matching. This is an ugly wart on a  beautiful language. 
 
 
