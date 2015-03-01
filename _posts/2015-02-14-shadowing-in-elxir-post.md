@@ -67,7 +67,7 @@ Eshell V6.3  (abort with ^G)
 
 {% endhighlight %}
 
-Yes the intermediate variables `X`,`X1`,`X2`,`X3` are pretty darn ugly. It's not just ugly, it's potentially dangerous. Several times in Erlang, I've accidentally passed the wrong intermediate variable to a `dict` and as a result "lost a step" in the transformation. Unless you make an unfortunate combination of multiple goofs, you will get a compiler warning saying you have "usused variables". That compiler warning often saves the day. At any rate, everyoje agrees this code is ugly.
+Yes the intermediate variables `X`,`X1`,`X2`,`X3` are pretty darn ugly. It's not just ugly; it's potentially dangerous. Several times in Erlang, I've accidentally passed the wrong intermediate variable to a `dict` and as a result "lost a step" in the transformation. Unless you make an unfortunate combination of multiple goofs, you will get a compiler warning saying you have "unused variables". That compiler warning often saves the day. At any rate, everyone agrees this code is ugly.
 
 Shadowing in Elixir allows something more _"normal looking"_ (to a non-FP developer anyway).
 
@@ -85,7 +85,7 @@ iex(5)>
 
 There we only have to keep up with one variable `x`. Seeing `x` rebound over-and-over is unsettling, and while not _as ugly_, this code is still _pretty ugly_. 
 
-Elixir's lovely pipe foreward operator (`|>`) produces a much more elegent solution:
+Elixir's lovely pipe-forward operator (`|>`) produces a much more elegant solution:
 
 {% highlight elixir %}
 iex(1)> x = HashDict.new |>
@@ -123,7 +123,7 @@ iex(4)> our_response = case knocking_at_our_door do
 
 {% endhighlight %}
 
-Wait! What the hell just happened?! Voldemort knocked at our door, and we say "Come on inside friend!" Let's check our variables (_and our underpants_) to see what happened...
+Wait! What the hell just happened?! Voldemort knocked at our door, and we say, "Come on inside friend!" Let's check our variables (_and our underpants_) to see what happened...
 
 {% highlight elixir %}
 
@@ -150,7 +150,7 @@ iex(4)> our_response = case knocking_at_our_door do
 
 {% endhighlight %}
 
-See the difference? Notice the `^friend` versus `friend` and `^enemy` versus `enemy`. The hat `^` says "use the last pinned value of this variable." Without the `^` the variable `friend` was't used as a guarding, declarative pattern match, it was used as a short-lived shadow variable that held whatever was passed in. That first clause would always match, and as soon as the case statement fell out of scope the evidence that (for just a tiny moment) `friend` was `==` to `Voldemort`. That is subtle. That is dark magic. It is easy (especially for Erlangers who expect a match) to miss it. This will cause disasters, and the upside of the current behavious is hard to see. 
+See the difference? Notice the `^friend` versus `friend` and `^enemy` versus `enemy`. The hat `^` says "use the last pinned value of this variable." Without the `^` the variable `friend` wasn't used as a guarding, declarative pattern match, it was used as a short-lived shadow variable that held whatever was passed in. That first clause would always match, and as soon as the case statement fell out of scope the evidence that (for just a tiny moment) `friend` was `==` to `Voldemort`. That is subtle. That is dark magic. It is easy (especially for Erlangers who expect a match) to miss it. This will cause disasters, and the upside of the current behaviour is hard to see. 
 
 ###Conclusion
 Shadowing is not harmful in the same way that mutable variables are harmful. It's not going to jack up your parallel work. Shadowing is harmful in another way; it creates a pitfall and adds a diligence requirement (always a bad thing) when using pattern matching. This is an ugly wart on a  beautiful language. 
