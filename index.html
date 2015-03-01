@@ -11,6 +11,7 @@ image:
 ---
 
 {% for post in paginator.posts %}
+{% unless post.draft %}
 <article class="hentry">
   <header>
     {% if post.image.feature %}
@@ -38,6 +39,7 @@ image:
     {{ post.content }}
   </div><!-- /.entry-content -->
 </article><!-- /.hentry -->
+{% endunless %}
 {% endfor %}
 
 <div class="pagination">
