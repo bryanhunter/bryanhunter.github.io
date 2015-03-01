@@ -18,12 +18,12 @@ owner:
   facebook:
   github: bryanhunter
   stackexchange:
-  linkedin:
+  linkedin: bryanhunter
   instagram:
   flickr:
   tumblr:
   # google plus id, include the '+', eg +mmistakes
-  google_plus:    +yourid
+  google_plus:
 
 # Background image to be tiled on all pages
 background:
