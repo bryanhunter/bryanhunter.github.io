@@ -116,14 +116,14 @@ Yes, Ron is our friend and Voldemort is our enemy, and you-know-who is about to 
 {% highlight elixir %}
 
 iex(4)> our_response = case knocking_at_our_door do
-...(4)>   friend -> "Come on inside, friend."
+...(4)>   friend -> "Come on inside, #{friend}."
 ...(4)>   enemy -> "Expelliarmus!"
 ...(4)> end
-"Come on inside, friend."
+"Come on inside, Voldemort."
 
 {% endhighlight %}
 
-Wait! What the hell just happened?! Voldemort knocked at our door, and we say, "Come on inside friend!" Let's check our variables (_and our underpants_) to see what happened...
+Wait! What the hell just happened?! Voldemort knocked at our door, and we say, "Come on inside Voldemort." Let's check our variables (_and our underpants_) to see what happened...
 
 {% highlight elixir %}
 
@@ -134,25 +134,65 @@ iex(6)> enemy
 iex(7)> knocking_at_our_door
 "Voldemort"
 iex(8)> our_response
-"Come on inside, friend."
+"Come on inside, Voldemort."
 
 {% endhighlight %}
 
-This is crazy. And we are dead. And this is by design. If we had written the follow code instead Harry Potter would have lived.
+This is crazy. And we are dead. And this is by design. If we had written the following code instead, Harry Potter would have lived.
 
 {% highlight elixir %}
 
 iex(4)> our_response = case knocking_at_our_door do
-...(4)>   ^friend -> "Come on inside, friend."
+...(4)>   ^friend -> "Come on inside, #{friend}."
 ...(4)>   ^enemy -> "Expelliarmus!"
 ...(4)> end
 "Explelliarmus!"
 
 {% endhighlight %}
 
-See the difference? Notice the `^friend` versus `friend` and `^enemy` versus `enemy`. The hat `^` says "use the last pinned value of this variable." Without the `^` the variable `friend` wasn't used as a guarding, declarative pattern match, it was used as a short-lived shadow variable that held whatever was passed in. That first clause would always match, and as soon as the case statement fell out of scope the evidence that (for just a tiny moment) `friend` was `==` to `Voldemort`. That is subtle. That is dark magic. It is easy (especially for Erlangers who expect a match) to miss it. This will cause disasters, and the upside of the current behaviour is hard to see. 
+See the difference? Notice the `^friend` versus `friend` and `^enemy` versus `enemy`. The hat `^` says "use the last pinned value of this variable." Without the `^` the variable `friend` wasn't used as a guarding, declarative pattern match; it was used as a short-lived shadow variable that held whatever was passed in. That first clause would always match, and as soon as the case statement fell out of scope the only evidence that (for just a tiny moment) `friend` was `==` to `Voldemort` is `our_response`. That is subtle; that is dark magic. It is easy (especially for Erlangers who expect a match) to miss it. This will cause problems, and the upside is hard to see. 
+
+If we write this as a module, will the compiler save us with a warning? Maybe. Maybe not.
+
+{% highlight elixir %}
+
+defmodule KnockKnock do 
+	def who_is_there do
+		friend = "Ron Weasley"
+		enemy = "Voldemort"
+		knocking_at_our_door = "Voldemort"
+
+		our_response = case knocking_at_our_door do
+			friend -> "Come on inside, #{friend}."
+			enemy -> "Expelliarmus!"
+		end
+
+		{friend,enemy,knocking_at_our_door,our_response}
+	end
+end
+{% endhighlight %}
+
+...and we compile
+{% highlight elixir %}
+iex(1)> c "knock_knock.ex"
+knock_knock.ex:9: warning: variable enemy is unused
+[KnockKnock]
+{% endhighlight %}
+
+Hmm... Mixed bag. There is no warning about `friend` because we use the value in our response. We luck-up and get a compiler warning on line:9 because `enemy` is not used in that clause. That might be enough to clue us in to the bug. If not, when we run 
+
+{% highlight elixir %}
+iex(2)> KnockKnock.who_is_there
+{"Ron Weasley", "Voldemort", "Voldemort", "Come on inside, Voldemort."}
+iex(3)>
+{% endhighlight %}
+
+> Knock, knock. 
+> Who's there?
+> You know. 
+> You-know-who? 
 
 ###Conclusion
-Shadowing is not harmful in the same way that mutable variables are harmful. It's not going to jack up your parallel work. Shadowing is harmful in another way; it creates a pitfall and adds a diligence requirement (always a bad thing) when using pattern matching. This is an ugly wart on a  beautiful language. 
+Shadowing is not harmful in the same way that mutable variables are harmful. It's not going to jack up your parallel work. Shadowing does create a pitfall and adds a diligence requirement (always a bad thing) when using pattern matching. This is an ugly wart on a beautiful language. 
 
 
