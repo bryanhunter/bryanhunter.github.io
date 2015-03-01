@@ -47,10 +47,9 @@ I'm not a fan of shadowing and don't use it, but it's not harmful. It doesn't cr
 
 Done!
 
-
 ###Well not quite...
 
-So why does shadowing drive many Erlangers crazy? Let's start of with how Erlang drives everyone else crazy. Shadowing was introduced in Elixir to avoid an ugly thing that happens in Erlang code when you need to perform a series of operations on some data. For example a dictionary...
+I feel I need to go into _why_ shadowing drives many Erlangers crazy? Let's start off with how Erlang drives everyone else crazy. Shadowing was introduced in Elixir to avoid an ugly thing that happens in Erlang code when you need to perform a series of operations on some data. For example a dictionary...
 
 {% highlight erlang %}
 
@@ -100,7 +99,7 @@ The `|>` says take the output of the expression to the left and push it in as th
 
 Ok, but where is the actual harm in shadowing? The thing that drives Erlangers crazy is not aesthetics (obviously) (rimshot) (cheapshot).
 
-Here's the harm... here's what drives Erlangers crazy. Say we are Harry from the Harry Potter series. Ron Weasley is our buddy, and Voldemort will kill us on sight. We decide to code up a safety charm for our front door. We pick the ErlangVM because it is functional, declarative, and reliable. Here we go...
+Here's the harm... Say we are Harry from the Harry Potter series. Ron Weasley is our buddy, and Voldemort will kill us on sight. We decide to code up a safety charm for our front door. We pick the ErlangVM because it is functional, declarative, and reliable. Here we go...
 
 {% highlight elixir %}
 iex(1)> friend = "Ron Weasley"
@@ -123,7 +122,7 @@ iex(4)> our_response = case knocking_at_our_door do
 
 {% endhighlight %}
 
-Wait! What the hell just happened?! Voldemort knocked at our door, and we say, "Come on inside Voldemort." Let's check our variables (_and our underpants_) to see what happened...
+Wait! What the hell just happened?! Voldemort knocked at our door, and we say, "Come on inside, Voldemort." Let's check our variables (_and our underpants_) to see what just happened...
 
 {% highlight elixir %}
 
@@ -150,7 +149,7 @@ iex(4)> our_response = case knocking_at_our_door do
 
 {% endhighlight %}
 
-See the difference? Notice the `^friend` versus `friend` and `^enemy` versus `enemy`. The hat `^` says "use the last pinned value of this variable." Without the `^` the variable `friend` wasn't used as a guarding, declarative pattern match; it was used as a short-lived shadow variable that held whatever was passed in. That first clause would always match, and as soon as the case statement fell out of scope the only evidence that (for just a tiny moment) `friend` was `==` to `Voldemort` is `our_response`. That is subtle; that is dark magic. It is easy (especially for Erlangers who expect a match) to miss it. This will cause problems, and the upside is hard to see. 
+See the difference? Notice the `^friend` versus `friend` and `^enemy` versus `enemy`. The hat `^` says "use the last pinned value of this variable." Without the `^` the variable `friend` wasn't used as a guarding, declarative pattern match; it was used as a short-lived shadow variable that held whatever was passed in. That first clause would always match no matter what was passed in, and as soon as the case statement fell out of scope the only evidence that (for just a tiny moment) `friend` was `==` to `Voldemort` is `our_response`. That is subtle; that is dark magic. It is easy (especially for Erlangers who expect a match) to miss it. This will cause problems, and the upside is hard to see. 
 
 If we write this as a module, will the compiler save us with a warning? Maybe. Maybe not.
 
@@ -179,7 +178,7 @@ knock_knock.ex:9: warning: variable enemy is unused
 [KnockKnock]
 {% endhighlight %}
 
-Hmm... Mixed bag. There is no warning about `friend` because we use the value in our response. We luck-up and get a compiler warning on line:9 because `enemy` is not used in that clause. That might be enough to clue us in to the bug. If not, when we run 
+Hmm... Mixed bag. There is no warning about `friend` because we (pure-dumb-bad-luck) happened to use the value in our response. We do get a compiler warning on line:9 because `enemy` is not used in that clause (pure-dumb-good-luck). That might have been enough to clue us in to the bug. If not, when we run... 
 
 {% highlight elixir %}
 iex(2)> KnockKnock.who_is_there
@@ -193,6 +192,8 @@ iex(3)>
 > You-know-who? 
 
 ###Conclusion
-Shadowing is not harmful in the same way that mutable variables are harmful. It's not going to jack up your parallel work. Shadowing does create a pitfall and adds a diligence requirement (always a bad thing) when using pattern matching. This is an ugly wart on a beautiful language. 
+Shadowing is not harmful in the same way that mutable variables are harmful. It's not going to jack up your parallel work. Shadowing does create a potential pitfall though and adds a diligence requirement (always a bad thing) when using pattern matching. 
+
+This is an ugly wart on a beautiful language. 
 
 
