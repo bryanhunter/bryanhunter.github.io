@@ -150,23 +150,23 @@ iex(4)> our_response = case knocking_at_our_door do
 
 See the difference? Notice the `^friend` versus `friend` and `^enemy` versus `enemy`. The hat `^` says "use the last pinned value of this variable." Without the `^` the variable `friend` wasn't used as a guarding, declarative pattern match; instead it was used as a short-lived shadow variable that held whatever was passed in. That first clause would always match no matter what was passed in, and as soon as the case statement fell out of scope the only evidence that `friend` was ever equal to `Voldemort` is `our_response`. That is subtle; that is dark magic. It is easy (especially for Erlangers who expect a match) to miss it. This will cause problems, and the upside is hard to see. 
 
-Another question: if we write this as a module, will the compiler save us with a helpful warning? Answer: Maybe, or maybe not.
+Another question: if we write this as a module, will the compiler save us with a helpful warning? Answer: maybe, or maybe not.
 
 {% highlight elixir %}
 
 defmodule KnockKnock do 
-	def who_is_there do
-		friend = "Ron Weasley"
-		enemy = "Voldemort"
-		knocking_at_our_door = "Voldemort"
+  def who_is_there do
+    friend = "Ron Weasley"
+    enemy = "Voldemort"
+    knocking_at_our_door = "Voldemort"
 
-		our_response = case knocking_at_our_door do
-			friend -> "Come on inside, #{friend}."
-			enemy -> "Expelliarmus!"
-		end
+    our_response = case knocking_at_our_door do
+      friend -> "Come on inside, #{friend}."
+      enemy -> "Expelliarmus!"
+    end
 
-		{friend,enemy,knocking_at_our_door,our_response}
-	end
+    {friend,enemy,knocking_at_our_door,our_response}
+  end
 end
 {% endhighlight %}
 
