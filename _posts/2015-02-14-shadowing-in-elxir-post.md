@@ -148,7 +148,7 @@ iex(4)> our_response = case knocking_at_our_door do
 
 {% endhighlight %}
 
-See the difference? Notice the `^friend` versus `friend` and `^enemy` versus `enemy`. The hat `^` says "use the last pinned value of this variable." Without the `^` the variable `friend` wasn't used as a guarding, declarative pattern match; instead it was used as a short-lived shadow variable that held whatever was passed in. That first clause would always match no matter what was passed in, and as soon as the case statement fell out of scope the only evidence that `friend` was ever equal to `Voldemort` is `our_response`. That is subtle; that is dark magic. It is easy (especially for Erlangers who expect a match) to miss it. This will cause problems, and the upside is hard to see. 
+See the difference? Notice the `^friend` versus `friend` and `^enemy` versus `enemy`. The hat `^` says "use the last pinned value of this variable." Without the `^` the variable `friend` wasn't used as a guarding, declarative pattern match; instead it was used as a short-lived shadow variable that held whatever was passed in. **That first clause would always match no matter what was passed in**, and as soon as the case statement fell out of scope the only evidence that `friend` was ever equal to `Voldemort` is `our_response`. That is subtle; that is dark magic. It is easy (especially for Erlangers who expect a match) to miss it. This will cause problems, and the upside is hard to see. 
 
 Another question: if we write this as a module, will the compiler save us with a helpful warning? Answer: maybe, or maybe not.
 
@@ -191,8 +191,13 @@ iex(3)>
 > You-know-who? 
 
 ###Conclusion
-Shadowing is not harmful in the same way that mutable variables are harmful. It's not going to jack up your parallel work. Shadowing does create a potential pitfall though, and it adds a diligence requirement (always a bad thing) when using pattern matching. 
+Shadowing is not harmful in the same way that mutable variables are harmful. It's not going to jack up your parallel work. Shadowing does create a potential pitfall though, and it adds a diligence requirement (*always a bad thing*) when using pattern matching. 
 
-This is an ugly wart on a beautiful language. 
+This is an ugly wart on a beautiful language. Fortunately, there is a solution that is well proven, and it doesn't require Elixir to beak its v1.0 contracts. In Erlang, if you write a `case` in which a pattern will never match you get a warning 
+{% highlight erlang %}
+Warning: this clause cannot match because a previous clause at line 11
+always matches 
+{% endhighlight %}
 
+If Elixir were to do the same everyone wins (except Voldemort).
 
