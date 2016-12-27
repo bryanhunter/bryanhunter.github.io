@@ -99,6 +99,7 @@ We could take a peek at Scott Wlaschin's "[13 Ways of Looking at a Turtle](http:
 
 ## Phoenix channels via an F# Agent-backed API
 First, what does our API need to let us do?
+
 * _Connect to a Socket_: We will create a socket connection by pointing our websocket library at a Phoenix endpoint (Uri).
 * _Join Channel_: Phoenix channels are topic based conversations that many users can join simultaneously. From our single socket connection we can join many channels.
 * _Receive_: After we join a channel we want to be able to lurk and hear what's being sent on the channel.
