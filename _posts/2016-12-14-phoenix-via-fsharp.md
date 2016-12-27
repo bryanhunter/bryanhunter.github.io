@@ -18,6 +18,7 @@ If you are unfamiliar with Elixir..._[info info info]_... Phoenix is the primary
 
 ### Prerequisites
 We're going to need:
+
 * F#
 * Elixir
 * A Phoenix application to test against
