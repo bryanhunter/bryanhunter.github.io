@@ -107,3 +107,15 @@ First, what does our API need to let us do?
 * _Send_: We also want the ability to send our own messages to other to the channel.
 * _Leave Channel_: When we are no longer interested in sending or receiving messages on a given topic we should be able to leave that channel without affecting our other channels.
 * _Diconnect the socket_: When the party comes to an end we don't want F# to be "that guy" who doesn't know it's time to leave.
+
+### Message formats
+In our REPL adventure above, we saw the structure of the messages that Phoenix expects from us. Let's get away from our imperative low-level strings and move forward to F# types.
+
+{% highlight OCaml %}
+type Message = {
+    topic:string    // The string topic or topic:subtopic pair namespace, for example "messages", "messages:123"
+    event:string    // The string event name, for example "phx_join"
+    payload:string  // The message payload
+    ref:string}     // The unique string ref
+
+{% endhighlight %}
