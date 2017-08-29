@@ -11,8 +11,9 @@ noindex: false
 The other day I received an email from a friend who is coming to Elixir from Ruby. The subject line
 was "elixir immutability".
 
-###The question
->I’m working throughout the elixir-lang.org tutorial and I cannot understand why the language
+### The question
+
+> I’m working throughout the elixir-lang.org tutorial and I cannot understand why the language
 > is immutable AND I can keep re-assigning the different values to the same variable
 > {% highlight elixir %}
  iex(21)> x = 1
@@ -24,7 +25,7 @@ was "elixir immutability".
 {% endhighlight %} > I thought the definition of immutability is that you can’t do that!  What gives?
 
 
-###My response
+### My response
 Variables in Elixir are immutable like they are in Erlang. The thing you are seeing that looks like mutation (and drives many Erlangers crazy) is called *rebinding* ([more here](http://en.wikipedia.org/wiki/Name_binding#Rebinding_and_mutation)). So in your shell example, you didn’t actually change the value that `x` pointed to. Instead, you created a brand new identifier with the name `x` that pointed at a different value (`2`). The old identifier `x` is no longer available, but its old value (`1`) remains in memory untouched until it is garbage collected. The following sample uses an anonymous function to show what’s happening a bit more clearly:
 
 {% highlight elixir %}
@@ -45,12 +46,12 @@ I'm not a fan of rebinding, but under the hood, Elixir plays by the same rules a
 
 Elixir's rebinding doesn't create any of the shared-mutable-memory concurrency problems of non-functional languages. I suppose José Valim felt the syntactic sugar of rebinding would make people feel more at home if they were coming from OO languages."
 
-###The reply
+### The reply
 > And that explanation explains it perfectly. If you blog elixir, consider posting that because I didn’t “get it” from googling for it.
 
 Done!
 
-###Well not quite...
+### Well not quite...
 
 I feel I need to go into _why_ rebinding drives many Erlangers crazy, but first let's start with how Erlang drives everyone else crazy. Rebinding was introduced in Elixir to avoid an ugly thing that happens in Erlang code when you need to perform a series of operations on some data. For example a dictionary in Erlang...
 
@@ -98,7 +99,7 @@ iex(2)>
 
 The `|>` says: "*take the output of the expression to the left and push it in as the first argument to the expression on the right*". This feels functional; this makes me happy. With the pipe operator, I don't need/want the ability to rebind `x` to different values. 
 
-###The harm for Erlangers
+### The harm for Erlangers
 
 Ok, but where is the actual harm in rebinding? The thing that drives Erlangers crazy is not aesthetics (obviously)...(rimshot)...(cheapshot).
 
@@ -194,7 +195,7 @@ iex(3)>
 > You know. 
 > You-know-who? 
 
-###Conclusion
+### Conclusion
 Identifier rebinding is not harmful in the same way that mutable variables are harmful. It's not going to jack up your parallel work. Rebinding does create a potential pitfall though, and it adds a diligence requirement (*always a bad thing*) when using pattern matching. 
 
 This is an ugly wart on a beautiful language. Fortunately, there is a solution that is well proven, and it doesn't require Elixir to beak its v1.0 contracts. In Erlang, if you write a `case` in which a pattern will never match you get a warning 
