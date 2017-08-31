@@ -198,7 +198,7 @@ iex(3)>
 ### Conclusion
 Identifier rebinding is not harmful in the same way that mutable variables are harmful. It's not going to jack up your parallel work. Rebinding does create a potential pitfall though, and it adds a diligence requirement (*always a bad thing*) when using pattern matching. 
 
-This is an ugly wart on a beautiful language. Fortunately, there is a solution that is well proven, and it doesn't require Elixir to beak its v1.0 contracts. In Erlang, if you write a `case` in which a pattern will never match you get a warning 
+This is an ugly wart on a beautiful language. Fortunately, there is a solution that is well proven, and it doesn't require Elixir to break its v1.0 contracts. In Erlang, if you write a `case` in which a pattern will never match you get a warning 
 {% highlight erlang %}
 Warning: this clause cannot match because a previous clause at line 11
 always matches 
